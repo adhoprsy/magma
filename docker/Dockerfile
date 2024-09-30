@@ -3,6 +3,18 @@ FROM ubuntu:18.04
 # TODO remove sudo for user "magma" to avoid unwanted priv escalation from
 # other attack vectors.
 
+RUN apt-get update && apt-get install -y sudo ca-certificates
+
+# Add TsingHua apt sources
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak
+RUN echo "deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic main restricted universe multiverse" >> /etc/apt/sources.list
+RUN echo "deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse" >> /etc/apt/sources.list
+RUN echo "deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse" >> /etc/apt/sources.list
+# RUN echo "deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-security main restricted universe multiverse" >> /etc/apt/sources.list
+
+ENV HTTP_PROXY http://172.17.0.1:7890
+ENV HTTPS_PROXY http://172.17.0.1:7890
+
 RUN apt-get update && apt-get install -y sudo
 
 ## Magma directory hierarchy
